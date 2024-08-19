@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="form-container">
+    <form id="form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+    <label for="sigfile">Upload file: </label>
+    <input type="file" accept=".csv" name = "sigfile", id="sigfile">
+    <button type="submit">Upload</button>
+    </form>
+    <div class="dropdown">
+        <label for="signalSelect">Select Signal: </label>
+        <select name="signal-dropdown" id="signalSelect">
+            {% for choice in choices %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+</div>
+
+<div class="container">
+    <div class="top-row">
+    <div class="widget">Signal Widget</div>
+    <div class="widget">Spectrogram Widget</div>
+    </div>
+    <div class="bottom-row">
+    <div class="widget">Probability plot Widget</div>
+    <div class="widget">Feature Importance Widget</div>
+    </div>
+</div>
+
+{% endblock %}
