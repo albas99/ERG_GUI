@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- <form method="post" enctype="multipart/form-data">
+   {% csrf_token %}
+   <input type="file" name="myfile">
+   <button type="submit">Upload</button>
+ </form> -->
+ 
+ <div class="form-container">
+     <form id="form" method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+        {{ form }}
+     <button type="submit", id = 'uploadSignalButton'>Upload</button>
+     </form>
+     <div class="dropdown">
+         <label for="signalSelect">Select Signal: </label>
+         <select name="signal-dropdown" id="signalSelect" data-url = "{% url 'get_selection' %}">
+             {% for choice in choices %}
+                 <option value="{{ choice }}">{{ choice }}</option>
+             {% endfor %}
+         </select>
+         <button type="button" id="signalSelectButton">Select</button>
+     </div>
+     
+ </div>
+
+{% endblock %}
