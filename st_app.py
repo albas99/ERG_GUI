@@ -47,7 +47,7 @@ def compute_features(sig_no):
 
     return features_df
     
-st.title("Oculusgrahpy")
+st.title("Oculusgraphy")
     
 
 loaded_model = pickle.load(open('model.pkl', 'rb'))
