@@ -47,16 +47,13 @@ def compute_features(sig_no):
 
     return features_df
     
-with open('model.pkl', 'rb') as model:
-    loaded_model = pickle.load(model)
+st.title("Oculusgrahpy")
     
-with open('encoder.pkl', 'rb') as encoder:
-    loaded_encoder = pickle.load(encoder)
 
-col1, col2 = st.columns([3, 1])
-
-with col2:
-    st.button("Upload", key = "upload")
+loaded_model = pickle.load(open('model.pkl', 'rb'))
+loaded_encoder = pickle.load(open('encoder.pkl', 'rb'))
+st.session_state.loaded_model = loaded_model
+st.session_state.loaded_encoder = loaded_encoder
     
 uploaded_file = st.file_uploader("Upload file:", type = "csv")
 
@@ -77,24 +74,32 @@ if uploaded_file is not None:
         
         features = compute_features(selected_column)
         # st.write(features)
+        # 
+        # st.session_state.features = features
+        # st.write(st.session_state.features)
         
-        if features is not None:    
-            prediction = loaded_model.predict(features)
-            prediction_probs = loaded_model.predict_proba(features)
-            # st.write(prediction, prediction_probs)
-            
-            probs_plot, fi_plot = st.columns([1, 1])
-                    
-            with probs_plot:
-                fig, ax = plt.subplots()
-                ax.barh(loaded_encoder.classes_, prediction_probs[0])
-                st.pyplot(fig)
-            
-            with fi_plot:
-                fig, ax = plt.subplots()
-                ax.barh(loaded_model.model.estimator.feature_name_, loaded_model.model.estimator.feature_importances_)
-                st.pyplot(fig)
+        # if 'features' in st.session_state:
+        # import pdb; pdb.set_trace()      
+        prediction = loaded_model.predict(features)
+        prediction_probs = loaded_model.predict_proba(features)
+        st.write("prediction:", loaded_encoder.inverse_transform(prediction))
         
+        probs_plot, fi_plot = st.columns([1, 1])
+                
+        with probs_plot:
+            fig, ax = plt.subplots()
+            # st.write(prediction_probs.reshape(-1, 1))
+            probs_df = pd.DataFrame(prediction_probs.reshape(-1, 1), loaded_encoder.classes_)
+            probs_df.columns = ['value']
+            # st.dataframe(probs_df)
+            ax.barh(probs_df.index, probs_df['value'])
+            st.pyplot(fig)
+        
+        with fi_plot:
+            fig, ax = plt.subplots()
+            ax.barh(loaded_model.model.estimator.feature_name_, loaded_model.model.estimator.feature_importances_)
+            st.pyplot(fig)
+    
     # with sigplot:
     #     fig, ax = plt.subplots()
     #     sig = np.array(df[selected_column])
