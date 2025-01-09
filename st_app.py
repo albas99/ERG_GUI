@@ -82,7 +82,7 @@ if uploaded_file is not None:
         # import pdb; pdb.set_trace()      
         prediction = loaded_model.predict(features)
         prediction_probs = loaded_model.predict_proba(features)
-        st.write("prediction:", loaded_encoder.inverse_transform(prediction))
+        # st.write("prediction:", loaded_encoder.inverse_transform(prediction))
         
         probs_plot, fi_plot = st.columns([1, 1])
                 
